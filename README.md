@@ -2,21 +2,18 @@
 
 # EU Vulnerability Database API Documentation
 The Vulnerability Database of the European Union is online and can be reached under the URL: https://euvd.enisa.europa.eu/.  
-Due to lack of documentation of the API, I've tried to document what I've found so far by using the Dev-tools of the Browser.  
-So please take these notes with a grain of salt, they may be outdated quickly.  
-As of writing this on 17.04.2025, the EUVD is online as a BETA.
+As of writing this update on 9th of June 2025, there is an API Documentation available under https://euvd.enisa.europa.eu/apidoc which is merged into this notes.
+But please take these notes with a grain of salt, and refer to the official documentation.  
 
 ## URL
-This is the API URL where GET requests can be used to retrieve Vulnerabilities from the EU Vulnerability Database EUVD.
-
-**Note:** The URL might change in the future.
+This is the API Endpoint URL where GET requests can be used to retrieve Vulnerabilities from the EU Vulnerability Database EUVD.
 
 ```
-https://euvdservices.enisa.europa.eu/api/vulnerabilities?assigner=&product=&vendor=&text=&fromDate=&toDate=&fromScore=0&toScore=10&fromEpss=0&toEpss=100&exploited=false&page=0&size=1
+https://euvdservices.enisa.europa.eu/api/search?assigner=&product=&vendor=&text=&fromDate=&toDate=&fromScore=0&toScore=10&fromEpss=0&toEpss=100&exploited=false&page=0&size=10
 ```
 
-### Fields
-|Field|Type|Description & Allowed values|Examples|
+### Parameters
+|Parameter|Type|Description & Allowed values|Examples|
 |---|---|---|---|
 |**assigner**|string|The identifier assigning CVE Numbering Authority (CNA)|oracle|
 |**product**|string|Product names. <br> Spaces within the name need to be encoded as a plus sign (+).|Microsoft Windows will be Microsoft+Windows|
@@ -36,7 +33,7 @@ https://euvdservices.enisa.europa.eu/api/vulnerabilities?assigner=&product=&vend
 For testing you can use this simple curl command to retrieve **one** Vulnerability.
 ```
 curl --request GET \
-     --url "https://euvdservices.enisa.europa.eu/api/vulnerabilities?assigner=&product=&vendor=&text=&fromDate=&toDate=&fromScore=0&toScore=10&fromEpss=0&toEpss=100&exploited=false&page=0&size=1" \
+     --url "https://euvdservices.enisa.europa.eu/api/search?assigner=&product=&vendor=&text=&fromDate=&toDate=&fromScore=0&toScore=10&fromEpss=0&toEpss=100&exploited=false&page=0&size=1" \
      --header 'accept: application/json'
 ```
 
@@ -98,4 +95,60 @@ The returned JSON looks like this and can be easily read by any program for furt
     }],
     "total": 260423
 }
+```
+
+## Show latest vulnerabilities
+**Endpoint:** /api/lastvulnerabilities  
+**Response Size Limit:** Maximum 8 records
+
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/lastvulnerabilities" \
+     --header 'accept: application/json'
+```
+
+## Show latest exploited vulnerabilities
+**Endpoint:** /api/exploitedvulnerabilities  
+**Response Size Limit:** Maximum 8 records
+
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/exploitedvulnerabilities" \
+     --header 'accept: application/json'
+```
+
+## Show latest critical vulnerabilities
+**Endpoint:** /api/criticalvulnerabilities  
+**Response Size Limit:** Maximum 8 records
+
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/criticalvulnerabilities" \
+     --header 'accept: application/json'
+```
+
+## Show EUVD by ID
+**Endpoint:** /api/enisaid  
+### Parameters
+|Parameter|Type|Description & Allowed values|Examples|
+|---|---|---|---|
+|**id**|string|The EU identifier assigned to the vulnerability|EUVD-2025-4893|
+
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/enisaid?id=EUVD-2024-45012" \
+     --header 'accept: application/json'
+```
+
+## Show advisory by ID
+**Endpoint:** /api/advisory  
+### Parameters
+|Parameter|Type|Description & Allowed values|Examples|
+|---|---|---|---|
+|**id**|string|The EU identifier assigned to the advisory|oxas-adv-2024-0002|
+
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/advisory?id=oxas-adv-2024-0002" \
+     --header 'accept: application/json'
 ```
