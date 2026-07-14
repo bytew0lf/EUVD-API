@@ -133,10 +133,16 @@ curl --request GET \
 |Parameter|Type|Description & Allowed values|Examples|
 |---|---|---|---|
 |**id**|string|The EU identifier assigned to the vulnerability|EUVD-2025-4893|
+|**id**|string|The CVE identifier |CVE-2026-14846|
 
 ```
 curl --request GET \
      --url "https://euvdservices.enisa.europa.eu/api/enisaid?id=EUVD-2024-45012" \
+     --header 'accept: application/json'
+```
+```
+curl --request GET \
+     --url "https://euvdservices.enisa.europa.eu/api/enisaid?id=CVE-2026-14846" \
      --header 'accept: application/json'
 ```
 
