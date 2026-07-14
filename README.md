@@ -158,3 +158,72 @@ curl --request GET \
      --url "https://euvdservices.enisa.europa.eu/api/advisory?id=oxas-adv-2024-0002" \
      --header 'accept: application/json'
 ```
+
+# Data Downloads
+## Download CVE-to-EUVD ID Mapping (CSV)
+
+**Endpoint:** /api/dump/cve-euvd-mapping|
+Response limit: Full dataset (CSV with columns: euvd_id, cve_id). Contains only records linked to published CVEs. Updated daily at 07:00 UTC.
+
+```
+curl -X GET https://euvdservices.enisa.europa.eu/api/dump/cve-euvd-mapping
+```
+
+To save the content to a file
+```
+curl -o euvd-cve-mapping.csv -X GET https://euvdservices.enisa.europa.eu/api/kev/dump
+```
+
+### Example response
+```
+EUVD-2026-9982,CVE-2026-28429
+EUVD-2026-9983,CVE-2026-28507
+EUVD-2026-9984,CVE-2026-28508
+EUVD-2026-9985,CVE-2026-28509
+EUVD-2026-9986,CVE-2026-28675
+```
+
+## Download KEV Dump (JSON)
+**Endpoint:** /api/kev/dump
+Response limit: Full dataset (JSON). Consolidated Known Exploited Vulnerabilities from CISA KEV and ENISA EU KEV sources. Updated daily at 07:00 UTC.
+
+Response fields:
+|Field|Value|
+|---|---|
+|cveId|CVE identifier (e.g. CVE-2021-22555)|
+|euvdId|EUVD identifier (e.g. EUVD-2021-9696)|
+|dateAdded|Earliest date the CVE was added across all KEV sources (format: YYYY-MM-DD)|
+|sources|List of KEV sources that include this CVE (e.g. cisa_kev, eu_kev)|
+
+```
+curl -X GET https://euvdservices.enisa.europa.eu/api/kev/dump
+```
+
+To save the content to a file
+```
+curl -o KEV-dump.json -X GET https://euvdservices.enisa.europa.eu/api/kev/dump
+```
+
+### Example JSON response
+```
+[
+  {
+    "cveId": "CVE-2021-22555",
+    "euvdId": "EUVD-2021-9696",
+    "dateAdded": "2025-10-06",
+    "sources": [
+      "cisa_kev"
+    ]
+  },
+  {
+    "cveId": "CVE-2024-38856",
+    "euvdId": "EUVD-2024-37643",
+    "dateAdded": "2024-08-27",
+    "sources": [
+      "cisa_kev"
+    ]
+  }
+]
+```
+
+
